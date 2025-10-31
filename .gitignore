@@ -1,0 +1,6 @@
+# Claude Code folder
+.claude/
+
+# Agent OS - ignore everything except product subfolder
+agent-os/*
+!agent-os/product/
