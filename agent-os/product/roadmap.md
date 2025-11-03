@@ -1,48 +1,74 @@
 # Product Roadmap
 
-## Phase 1: Core Data Integration & Basic Visibility (3-4 months)
+## Phase 1: Data Infrastructure Foundation ($38,000 - $40,000 / 11 weeks)
+*Goal: Working data infrastructure for Phase 2 rate study with Bell & Associates*
 
-1. [ ] **Database Schema & Core Models** — Design and implement PostgreSQL schema supporting normalized storage of financial and operational data from multiple source systems with historical tracking, data versioning, and audit trails. `M`
+### Task 1: Data Request / Stakeholder Discovery (3 weeks / $3,000 - $4,000)
 
-2. [ ] **Data Import System Foundation** — Build standardized Excel/CSV upload interface with file validation, parsing, and error reporting for initial data ingestion from any source system. `M`
+1. [ ] **Data Request Development** — Create comprehensive data request document covering all source systems (General Ledger, Billing, Routing, Payroll, Collection Telemetrics, Scalehouse, Truck/Asset Maintenance) with specific fields, formats, and time periods needed. `S`
 
-3. [ ] **General Ledger Integration** — Implement end-to-end data pipeline for GL data including validation rules (account mapping, balance checks), transformation logic (categorization by service line and cost type), and storage with full audit trail. `L`
+2. [ ] **Stakeholder Interview Planning** — Schedule and conduct stakeholder interviews to understand data workflows, identify key contacts for each data source, and document current data collection processes. `S`
 
-4. [ ] **Billing System Integration** — Build data pipeline for billing system including validation (customer counts, revenue totals), transformation (revenue by service type and customer class), and historical tracking. `L`
+3. [ ] **Sample Data Analysis** — Analyze sample data from all source systems to understand data structures, identify quality issues, document relationships across systems, and define validation requirements. `M`
 
-5. [ ] **Executive Dashboard** — Create high-level dashboard showing key financial metrics (budget vs actuals, revenue trends, expense patterns, reserve levels, key ratios) with drill-down capabilities and period comparisons. `M`
+### Task 2: Kick-Off Meeting / System Inventory (1 week / $5,000 - $6,000)
 
-6. [ ] **Financial Performance Dashboard** — Build detailed financial dashboard displaying revenue and expense trends by service line and cost category with YoY comparisons and variance analysis. `M`
+4. [ ] **Kick-Off Meeting & Facility Tour** — Conduct kick-off meeting with City staff and Bell & Associates team, tour facilities, interview stakeholders, and present preliminary findings from Task 1. `S`
 
-7. [ ] **User Authentication & Authorization** — Implement role-based access control system supporting analyst, executive, and consultant roles with secure session management and appropriate data permissions. `S`
+5. [ ] **Data Workflow Documentation** — Document current data collection and analysis processes, map data dependencies and relationships across systems, and identify project issues, goals, roles, and responsibilities. `S`
 
-## Phase 2: Complete Integration & Full Dashboard Suite (2-3 months)
+### Task 3: Data Infrastructure Implementation (4 weeks / $20,000 - $22,000)
 
-8. [ ] **Operational Data Integrations** — Implement data pipelines for Routing, Payroll, Collection Telemetrics, and Scalehouse systems with appropriate validation rules and transformations for each source. `L`
+6. [ ] **Database Design & Implementation** — Design and implement cloud PostgreSQL database with normalized schema for all source systems, historical data tracking, audit trail system, automated backups, and performance-optimized indices. `L`
 
-9. [ ] **Operational Metrics Dashboard** — Create dashboard showing operational KPIs (tonnage by service line and material type, cost per ton, route efficiency, customer counts, diversion rates) with filtering and trend analysis. `M`
+7. [ ] **Data Models for All Source Systems** — Create complete data models for General Ledger, Billing, Routing, Payroll, Collection Telemetrics, Scalehouse, and Truck/Asset Maintenance systems with proper relationships and constraints. `L`
 
-10. [ ] **Data Health Monitoring Dashboard** — Build dashboard showing data freshness, coverage completeness, validation issues, and data quality metrics so users understand when data can be trusted. `S`
+8. [ ] **File Upload Interface** — Build simple web form for uploading Excel/CSV files for each data source with basic authentication, file history tracking, and upload status visibility. `M`
 
-11. [ ] **Data Versioning & Audit System** — Implement comprehensive system to track all data imports, user changes, and data lineage with ability to view historical versions and understand data provenance. `M`
+9. [ ] **Data Validation Engine** — Implement automated validation rules for each data source with line-by-line error reporting, specific error messages, and validation summary reports. `M`
 
-12. [ ] **Automated Data Validation Framework** — Create configurable validation rule engine that runs automated checks for completeness, consistency, and reasonableness with exception reporting and resolution workflow. `M`
+10. [ ] **Data Transformation & Loading Pipeline** — Build ETL pipeline to parse uploaded files into standardized format, apply business rules and categorizations, load validated data into database, and generate import summary reports. `M`
 
-## Phase 3: Data Export Engine & Collaboration (2 months)
+11. [ ] **User Authentication & Authorization** — Implement secure login system with role-based access control supporting Admin, Analyst, and Viewer roles with appropriate permissions for upload, export, and user management. `M`
 
-13. [ ] **Pre-Built Data Packages** — Create standardized export packages (Financial Data Package with multi-year revenue/expense by service line; Operational Data Package with tonnage and routing; Customer Data Package with billing and service levels) exportable in Excel and CSV formats. `M`
+12. [ ] **Administrative Interface** — Create simple web interface for user management, viewing data import history, and basic system health monitoring. `S`
 
-14. [ ] **Custom Data Export Builder** — Build interface allowing users to select specific data elements, apply filters, choose format (Excel, CSV, JSON), and export custom datasets for their specific analysis needs. `M`
+13. [ ] **Cloud Infrastructure & Deployment** — Deploy PostgreSQL database on Supabase, deploy backend API on cloud platform, deploy frontend on Vercel, and configure HTTPS and security settings. `M`
 
-15. [ ] **API for Data Access** — Implement REST API endpoints allowing programmatic access to validated datasets for integration with Python/R analysis workflows or external tools. `M`
+14. [ ] **Database Schema Documentation** — Create complete data dictionary with field definitions, validation rules, business logic, and relationships for every data element across all source systems. `M`
 
-16. [ ] **Basic Summary Reporting** — Create simple report generation system for stakeholder summaries and compliance documentation (standardized PDF/Excel reports with key metrics and trends). `S`
+### Task 4: Phase 2-Ready Data Export System (3 weeks / $8,000 - $10,000)
+
+15. [ ] **Bell & Associates Requirements Workshop** — Conduct detailed review session with Bell & Associates to understand existing rate model structure, current data preparation workflows, pain points, preferred file formats, and calculation methodologies. `S`
+
+16. [ ] **Cost-of-Service Analysis Export Package** — Design and implement export package with multi-year revenue data by service line, expense data by function and cost center, and cost allocation bases (tonnage, customer counts, route hours, labor hours). `M`
+
+17. [ ] **Operational Metrics Export Package** — Design and implement export package with collection operations data (tonnage, labor, trucks, routes), disposal operations data (tonnage by material, costs, diversion rates), and asset & labor data (fleet costs, equipment, payroll). `M`
+
+18. [ ] **Rate Modeling Input Export Package** — Design and implement export package with current state baseline (existing rates, customer counts, cost allocations), projection inputs (multi-year trends, revenue projections, capital requirements), and scenario variables (variable costs, fixed costs, volume sensitivity). `M`
+
+19. [ ] **Custom Export Builder Interface** — Build web interface allowing users to select specific data elements from any source system, combine data across sources, apply filters and date ranges, preview data, and export in Excel or CSV formats. `M`
+
+20. [ ] **Export Documentation & Data Lineage** — Create comprehensive guide to all export packages with field-level data dictionaries, usage instructions, examples, troubleshooting guide, and complete data lineage documentation showing source system mapping and transformation logic. `M`
+
+## Future Phases: Advanced Analytics & Dashboards (Deferred)
+*These features can be added when budget allows*
+
+### Phase 2: Management Dashboards & Visualization
+- **Executive Dashboard** — High-level dashboard showing key financial metrics (budget vs actuals, revenue trends, expense patterns, reserve levels, key ratios) with drill-down capabilities and period comparisons
+- **Financial Performance Dashboard** — Detailed financial dashboard displaying revenue and expense trends by service line and cost category with YoY comparisons and variance analysis
+- **Operational Metrics Dashboard** — Dashboard showing operational KPIs (tonnage by service line and material type, cost per ton, route efficiency, customer counts, diversion rates) with filtering and trend analysis
+- **Data Health Monitoring Dashboard** — Dashboard showing data freshness, coverage completeness, validation issues, and data quality metrics so users understand when data can be trusted
+
+### Phase 3: Advanced Features
+- **API for Data Access** — REST API endpoints allowing programmatic access to validated datasets for integration with Python/R analysis workflows or external tools
+- **Advanced Reporting** — Automated report generation system for stakeholder summaries and compliance documentation (standardized PDF/Excel reports with key metrics and trends)
+- **Real-Time Data Connections** — Direct API connections to source systems for automated data refresh instead of manual file uploads
+- **Predictive Analytics** — Machine learning models for forecasting tonnage, revenue, and cost trends
 
 > Notes
-> - Total: 16 items across 3 phases
-> - Phase 1 focuses on core data integration (GL + Billing) and basic dashboards (3-4 months)
-> - Phase 2 completes all system integrations and full dashboard suite (2-3 months)
-> - Phase 3 adds data export capabilities and collaboration features (2 months)
-> - Each item represents end-to-end functionality (backend + frontend)
-> - Effort estimates: XS (1 day), S (2-3 days), M (1 week), L (2 weeks), XL (3+ weeks)
-> - Philosophy: Build the data foundation that makes financial analysis easier, not try to replace existing modeling tools
+> - Phase 1 total: 20 items across 4 tasks / 11 weeks / $38,000 - $40,000
+> - Phase 1 deliverables: Working database, upload interface, validation system, user authentication, deployed cloud infrastructure, complete data dictionary, Phase 2-ready export system with 3 pre-built packages, custom export builder, and comprehensive documentation
+> - Effort estimates: S (2-3 days), M (1 week), L (2 weeks)
+> - Phase 1 philosophy: Build functional infrastructure that makes data accessible and trustworthy, not a polished platform
+> - Future phases add advanced dashboards, visualizations, and analytics capabilities when budget allows
