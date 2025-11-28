@@ -32,10 +32,7 @@ This Phase 1 scope delivers a **working data infrastructure** that consolidates 
 Upon receipt of the notice to proceed, we will provide a detailed list of information necessary to initiate the project. The data request will itemize our needs for understanding service delivery and the data generated from the various systems used to manage Department operations.
 
 ### Activities
-- Develop comprehensive data request covering all source systems
-- Schedule stakeholder interviews to understand data workflows
-- Identify key contacts for each data source
-- Analyze sample data from all source systems, including:
+- Develop comprehensive data request covering all source systems and analyze sample data:
   - General Ledger structure and account codes
   - Billing system data formats and customer segmentation
   - Routing system schedules and assignments
@@ -43,6 +40,11 @@ Upon receipt of the notice to proceed, we will provide a detailed list of inform
   - Payroll hours by function
   - Collection telemetrics and tonnage data
   - Scalehouse operations and material tracking
+- Identify key contacts for each data source
+- Plan and schedule data stakeholder interviews to understand data workflows, including:
+  - current data collection and analysis processes
+  - data quality issues and validation requirements
+  - data dependencies and relationships across systems
 
 ## Task 2: Kick-Off Meeting / Review of Department / Inventory of Systems and Data
 
@@ -54,10 +56,8 @@ Once we have received the requested data from Task 1, we will schedule meetings 
 ### Activities
 - Conduct kick-off meeting with City staff and Bell & Associates team
 - Tour facilities
-- Interview stakeholders
-- Document current data collection and analysis processes
-- Map data dependencies and relationships across systems
-- Identify data quality issues and validation requirements
+- Interview data stakeholders
+- Document data workflows per plan from meeting transcipts
 
 ## Task 3: Data Infrastructure Implementation
 
@@ -132,7 +132,7 @@ Build the core data infrastructure that consolidates all source systems into a c
 - **Database Schema Documentation**
 - **Complete Data Dictionary** with field definitions and validation rules
 - **Import Process Documentation** for each data source
-- **Administrator Guide** for user management and system maintenance
+- **Administrator Guide** for user management
 
 ## Task 4: Phase 2-Ready Data Export System
 
@@ -152,78 +152,87 @@ Conduct a detailed review session with Bell & Associates team to understand:
 
 ### 4.2 Phase 2 Rate Modeling Data Packages
 
-Based on the requirements workshop, we will design pre-built export packages that provide exactly the data needed for the Phase 2 cost-of-service analysis. Each package will be structured to minimize data preparation work and integrate directly into rate modeling processes.
+Based on the requirements workshop, we will design two analysis-ready data packages implemented as **materialized views** in the database. These views provide pre-aggregated, validated datasets that can be exported directly to Excel for use in Bell & Associates' existing spreadsheet-based rate models.
 
-While the exact packages are dependent on the workshop, **some examples** include: 
+The packages align directly with Phase 2 tasks:
 
-**Cost-of-Service Analysis Package**
-*Structured for revenue requirement and cost allocation analysis*
+---
 
-- **Revenue Data:**
-  - Multi-year revenue by service line (residential, commercial)
-  - Revenue by service type (garbage, recycling, organics, roll-off)
-  - Customer counts and revenue per customer by class
-  - Rate schedules and billing volumes
-  - Fund balances and reserve levels
+**Package 1: Cost-Rate Model Dataset** *(supports Task 5)*
 
-- **Expense Data:**
-  - Multi-year expenses by department and cost center
-  - Expenses allocated by function (collection, disposal, administration)
-  - Cost component breakdown (labor, equipment, disposal, overhead)
-  - Budget vs. actual with variance analysis
-  - Capital expenditures and debt service
+*Provides the financial and operational inputs needed to calculate costs by line of business and cost component in Bell's interactive cost-rate model.*
 
-- **Cost Allocation Bases:**
-  - Tonnage by material type and service line
-  - Customer counts by service type and class
-  - Route hours and truck counts by service
-  - Labor hours by function
-  - Facility utilization metrics
+This materialized view aggregates data to support expense allocation by:
+- **Line of Business:** Disposal, Cart Collection, Container Collection, Roll-Off Service
+- **Cost Component:** Disposal/Processing, Labor, Collection/Truck, Carts/Containers, Facility, Administrative, Taxes/Fees
 
-**Operational Metrics Package**
-*Structured for operational efficiency and unit cost analysis*
+| Data Element | Source System | Granularity |
+|-------------|---------------|-------------|
+| **Expense Data** | | |
+| Disposal/Processing costs | GL, Scalehouse | By material type (garbage, recycling, organic) |
+| Collection labor costs | Payroll, GL | By service line and material type |
+| Truck/Collection costs | Fleet/Asset, GL | By service type |
+| Cart/Container costs | Asset, GL | By container type and service |
+| Facility costs | GL | Allocated by service line |
+| Administrative overhead | GL | Allocated to garbage only (per B&A methodology) |
+| Taxes and fees | GL | Allocated to garbage only |
+| **Operational Allocation Bases** | | |
+| Tonnage by material type | Scalehouse, Telemetrics | By service line |
+| Customer counts | Billing | By service type and class |
+| Route hours | Routing, Payroll | By service line |
+| Truck counts and utilization | Fleet/Asset | By service type |
 
-- **Collection Operations:**
-  - Tonnage collected by route, service type, and material
-  - Collection labor hours and costs by service line
-  - Truck utilization and maintenance costs
-  - Routes serviced and frequency
-  - Efficiency metrics (tons per hour, cost per ton)
+**Output Format:** Single Excel export with:
+- Summary tab matching B&A cost-rate model input structure
+- Expense detail tab by GL account and allocation
+- Operational metrics tab with allocation bases
+- Monthly and annual aggregation options
 
-- **Disposal Operations:**
-  - Tonnage by material type and disposal method
-  - Disposal costs and tipping fees
-  - Scalehouse transaction data
-  - Material recovery and diversion rates
-  - Processing costs by material stream
+---
 
-- **Asset & Labor Data:**
-  - Truck fleet costs (purchase, maintenance, fuel)
-  - Equipment utilization and replacement schedules
-  - Payroll costs by function and allocation method
-  - Overtime and supplemental labor costs
+**Package 2: Cost of Service Study Dataset** *(supports Task 6)*
 
-**Rate Modeling Input Package**
-*Structured to feed directly into rate calculation models*
+*Provides the revenue requirement, cost allocation, and rate comparison data needed for the annual cost-of-service study and rate design recommendations.*
 
-- **Current State Baseline:**
-  - Existing rates by service type and customer class
-  - Current customer counts and service volumes
-  - Existing cost allocations by service line
-  - Historical growth rates (customers, tonnage, costs)
+This materialized view supports the Task 6 sub-components:
 
-- **Projection Inputs:**
-  - Multi-year expense trends by category
-  - Revenue projections at current rates
-  - Anticipated regulatory costs (carbon tax, organics mandate)
-  - Capital investment requirements
-  - Reserve level requirements
+| Task 6 Component | Data Elements | Source Systems |
+|-----------------|---------------|----------------|
+| **6.1 Revenue Requirement** | | |
+| Budgeted expenses by line of business | GL, Budget | By service (garbage, recycling, organics) |
+| Actual expenses (YTD) | GL | By department and cost center |
+| Interfund transfers | GL | As recorded |
+| Fund balances | GL | Current and target levels |
+| Asset reserves | GL, Asset | Landfill closure, equipment replacement |
+| **6.2 Cost of Service** | | |
+| Disposal costs per ton | GL, Scalehouse | By material type |
+| Collection costs per customer | GL, Billing, Payroll | By service type |
+| Unit costs by service | Calculated | Cost per customer per month |
+| **6.3 Rate Design Inputs** | | |
+| Current rate schedules | Billing | By service type and class |
+| Customer counts by class | Billing | Residential, commercial, roll-off |
+| Revenue by service type | Billing | Multi-year trend |
+| **6.4 Revenue Projection** | | |
+| Historical growth rates | Billing | Customers, tonnage, revenue |
+| Expense escalation factors | GL | By cost category |
+| Regulatory cost impacts | Manual input | State mandates, carbon costs |
 
-- **Scenario Variables:**
-  - Variable costs by service type
-  - Fixed cost allocations
-  - Volume sensitivity factors
-  - Alternative service configurations
+**Output Format:** Excel workbook with tabs for:
+- Revenue requirement summary (matching B&A memo format)
+- Expense detail by function and service
+- Cost of service calculations by line of business
+- Current vs. cost-of-service rate comparison
+- Revenue projection scenarios (current rates vs. proposed)
+- Multi-year trend analysis
+
+---
+
+**Implementation Notes:**
+
+- Both packages are implemented as **PostgreSQL materialized views** that refresh on demand or on a scheduled basis
+- Views include data validation flags to highlight any quality issues
+- Export interface allows date range selection and year-over-year comparisons
+- Field mappings documented to trace every output back to source system records
 
 ### 4.3 Custom Export Builder
 
@@ -255,6 +264,8 @@ While the exact packages are dependent on the workshop, **some examples** includ
 - Known data quality issues and workarounds
 
 ### Task 4 Deliverables
-- **3 Pre-Built Phase 2 Data Packages** (Cost-of-Service, Operational Metrics, Rate Modeling Inputs)
+- **2 Analysis-Ready Data Packages** as materialized database views:
+  - Cost-Rate Model Dataset (Task 5 support)
+  - Cost of Service Study Dataset (Task 6 support)
 - **Custom Data Export Builder** (web interface)
 - **Export System User Guide** with step-by-step instructions
