@@ -27,7 +27,7 @@
 
 8. [ ] **Authentication System & Administrative Interface** — Implement secure login system with role-based access control (Admin, Analyst, Viewer roles) with appropriate permissions for upload, export, and user management; create web interface for user management. `M`
 
-9. [ ] **Source System Data Integrations** (Vertical Slices per system) — For each source system, build a complete data integration including: dedicated source dashboard showing upload history and data coverage metrics; upload interface (modal) with schema guidance and downloadable schema template; database schema for the source; validation rules with error reporting; ETL pipeline to parse and load validated data. Each source has unique upload schemas, so dashboards are source-specific rather than unified. `L-XL total`
+9. [ ] **Source System Data Integrations** (Vertical Slices per system) — For each source system, build a complete data integration including: dedicated source dashboard showing upload history and data coverage metrics; upload interface (modal) with schema guidance and downloadable schema template; database schema for the source; validation rules with error reporting; ETL pipeline to parse and load validated data. Each source has unique upload schemas, so dashboards are source-specific rather than unified. `L - for each source`
     - General Ledger/Financial
     - Billing
     - Routing
