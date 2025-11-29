@@ -4,3 +4,6 @@
 # Agent OS - ignore everything except product subfolder
 agent-os/*
 !agent-os/product/
+
+# Secrets
+setup-secrets.md
