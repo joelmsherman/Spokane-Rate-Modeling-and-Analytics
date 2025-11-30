@@ -2,173 +2,151 @@
 
 ## Framework & Runtime
 
-### Frontend
-- **JavaScript Framework:** React 18+
-- **Application Framework:** Next.js 14+ (App Router)
+### Application Framework
+- **Framework:** Next.js (latest stable, App Router)
 - **Language/Runtime:** TypeScript with Node.js 22 LTS
 - **Package Manager:** npm
 
-### Backend
-- **API Framework:** Python 3.11+ with FastAPI
-- **Language/Runtime:** Python 3.11+
-- **Package Manager:** pip with requirements.txt (or poetry)
-- **ASGI Server:** Uvicorn
-
-## Frontend Stack
-
-### UI & Styling
+### Frontend
+- **JavaScript Framework:** React (via Next.js)
 - **CSS Framework:** Tailwind CSS
-- **UI Component Library:** shadcn/ui
-- **Charts & Visualization:** Recharts (primary choice for dashboards)
+- **UI Components:** shadcn/ui
+- **Charts & Visualization:** Recharts
 - **Icons:** Lucide React
 - **Build Tool:** Next.js built-in (Turbopack/Webpack)
 
-### Data Management
-- **API Client:** Fetch API / Axios
+### Data Management (Frontend)
 - **State Management:** React Context API / Zustand (if needed)
 - **Form Handling:** React Hook Form with Zod validation
 - **Data Tables:** TanStack Table (React Table v8)
 
-## Backend Stack
-
-### API & Business Logic
-- **API Framework:** FastAPI
-- **Validation:** Pydantic models
-- **Async Runtime:** asyncio
-- **API Documentation:** FastAPI automatic OpenAPI/Swagger
-
-### Data Processing
-- **Data Transformation:** Pandas for ETL, data cleaning, and transformations
-- **Excel/CSV Processing:** Pandas read_excel/read_csv with openpyxl/xlrd engines
-- **Excel/CSV Export:** Pandas to_excel/to_csv with xlsxwriter for formatted Excel exports
-- **JSON Processing:** Python standard library json module
-- **Data Validation:** Pandas validation + custom validation logic
-- **Date/Time Handling:** Python datetime and pandas datetime utilities
-
-### File & Report Generation
-- **PDF Generation:** ReportLab (for simple reports) or WeasyPrint (for HTML-to-PDF)
-- **Excel Export:** xlsxwriter (via Pandas) for formatted Excel files with multiple sheets
-
-## Database & Storage
+## Database & Backend Services (Supabase)
 
 ### Database
-- **Primary Database:** PostgreSQL 15+ (cloud-hosted)
-- **ORM:** SQLAlchemy 2.0+ with async support
-- **Migration Tool:** Alembic
-- **Connection Pooling:** SQLAlchemy built-in pool or pgbouncer
+- **Database:** Supabase PostgreSQL
+- **ORM/Query Builder:** Supabase Client SDK
+- **Migrations:** Supabase CLI migrations
+- **Real-time:** Supabase Realtime subscriptions (for upload status, etc.)
+
+### Authentication & Authorization
+- **Authentication:** Supabase Auth
+- **Authorization:** Supabase Row Level Security (RLS) policies
+- **Role-Based Access:** Custom roles via Supabase
 
 ### Storage
-- **File Storage:** Cloud storage (AWS S3, Azure Blob, or GCP Cloud Storage) for uploaded files and generated exports
-- **Local Storage (Development):** Local filesystem for development/testing
+- **File Storage:** Supabase Storage (for uploaded Excel/CSV files and generated exports)
+- **Storage Policies:** Supabase Storage RLS policies for access control
 
-## Authentication & Security
+### Backend Logic
+- **API Routes:** Next.js API Routes (for complex operations)
+- **Edge Functions:** Supabase Edge Functions (Deno) for:
+  - Data validation logic
+  - File processing triggers
+  - Export generation
+- **Database Functions:** PostgreSQL functions for complex queries and aggregations
 
-### Authentication
-- **Authentication Strategy:** JWT tokens or session-based auth
-- **Password Hashing:** bcrypt or passlib
-- **Authorization:** Role-based access control (RBAC) with custom middleware
+## Data Processing (Project-Specific)
 
-### Security
-- **HTTPS:** Required in production
-- **CORS:** FastAPI CORS middleware
-- **Input Validation:** Pydantic models on all endpoints
-- **SQL Injection Prevention:** SQLAlchemy ORM parameterized queries
-- **File Upload Security:** File type validation, size limits, virus scanning (optional)
+### File Processing Strategy
+For this data infrastructure project, file processing is handled via:
+- **Supabase Edge Functions:** Primary processing for Excel/CSV parsing and validation
+- **Next.js API Routes:** Alternative for heavier processing if needed
+- **Libraries:**
+  - `xlsx` (SheetJS) for Excel parsing in Edge Functions/API Routes
+  - `papaparse` for CSV parsing
+  - `zod` for data validation schemas
+
+### Export Generation
+- **Excel Export:** `xlsx` (SheetJS) for generating formatted Excel files with multiple sheets
+- **CSV Export:** Native JavaScript/`papaparse`
+- **PDF Reports:** `@react-pdf/renderer` or html-to-pdf via Edge Function
+
+### Data Validation
+- **Schema Validation:** Zod schemas matching database structure
+- **Business Rules:** Custom validation functions in Edge Functions
+- **Error Reporting:** Structured validation error objects stored in database
 
 ## Testing & Quality
 
-### Frontend Testing
+### Testing
 - **Test Framework:** Jest / Vitest
 - **Component Testing:** React Testing Library
-- **E2E Testing:** Playwright (optional for critical data export workflows)
-
-### Backend Testing
-- **Test Framework:** pytest
-- **API Testing:** pytest with httpx for async testing
-- **Test Coverage:** pytest-cov
-- **Database Testing:** pytest fixtures with test database
+- **E2E Testing:** Playwright (for critical upload/export workflows)
+- **API Testing:** Vitest with Supabase local development
 
 ### Code Quality
-- **Frontend Linting:** ESLint with TypeScript support
-- **Frontend Formatting:** Prettier
-- **Backend Linting:** Ruff or Flake8
-- **Backend Formatting:** Black
-- **Type Checking:** TypeScript (frontend), mypy (backend)
+- **Linting:** ESLint with TypeScript support
+- **Formatting:** Prettier
+- **Type Checking:** TypeScript strict mode
+- **Database Types:** Supabase CLI generated types
 
 ## Deployment & Infrastructure
 
 ### Hosting
-- **Frontend Hosting:** Vercel
-- **Backend Hosting:** Cloud platform (AWS ECS, Azure App Service, GCP Cloud Run, or similar)
-- **Database Hosting:** Managed PostgreSQL (AWS RDS, Azure Database, GCP Cloud SQL, or similar)
+- **Application Hosting:** Vercel
+- **Backend Services:** Supabase (managed)
+- **Edge Functions:** Supabase Edge Functions (Deno Deploy)
 
 ### CI/CD
-- **Frontend:** Vercel automatic deployments (GitHub integration)
-- **Backend:** GitHub Actions or cloud platform CI/CD
+- **Deployments:** Vercel automatic deployments (GitHub integration)
 - **Preview Deployments:** Automatic on pull requests
+- **Database Migrations:** Supabase CLI in CI pipeline
 
 ### Monitoring & Observability
 - **Frontend Analytics:** Vercel Analytics
-- **Error Tracking:** Sentry (frontend and backend)
-- **Logging:** Python logging with structured logs
-- **Performance Monitoring:** APM tool (optional: New Relic, Datadog, or cloud-native)
-
-## Development Tools
-
-### Environment Management
-- **Environment Variables:** .env files (never committed)
-- **Frontend Config:** Vercel environment variables
-- **Backend Config:** python-dotenv for local, cloud config for production
-
-### API Development
-- **API Documentation:** FastAPI auto-generated Swagger UI
-- **API Testing:** FastAPI TestClient or httpx
-- **Schema Validation:** Pydantic models
-
-### Version Control
-- **VCS:** Git with GitHub
-- **Branching Strategy:** Feature branches with pull requests
-- **Commit Standards:** Conventional commits (optional but recommended)
-
-## Third-Party Services
-
-### Essential Services
-- **Email (Optional):** SendGrid, AWS SES, or Resend for notifications
-- **File Storage:** Cloud storage provider (AWS S3, Azure Blob, GCP Cloud Storage)
-
-### Analytics & Monitoring
-- **Application Monitoring:** Sentry
-- **Performance Metrics:** Cloud provider metrics or dedicated APM
+- **Error Tracking:** Sentry
+- **Database Monitoring:** Supabase Dashboard
+- **Logs:** Supabase Edge Function logs, Vercel logs
 
 ## Development Environment
 
 ### Required Tools
 - **Node.js:** v22 LTS
-- **Python:** 3.11+
-- **PostgreSQL:** 15+ (local via Docker recommended)
+- **Supabase CLI:** Latest stable
 - **Git:** Latest stable
+
+### Local Development
+- **Database:** Supabase local development (`supabase start`)
+- **Environment Variables:** .env.local (never committed)
 
 ### Recommended IDE Setup
 - **Editor:** VS Code
-- **Extensions:** ESLint, Prettier, Python, Pylance
+- **Extensions:** ESLint, Prettier, Tailwind CSS IntelliSense
 - **Code Formatting:** Format on save enabled
+
+## Third-Party Services
+
+### Core Services
+- **Backend as a Service:** Supabase
+- **Hosting:** Vercel
+- **Email:** Supabase Auth (transactional) or Resend
+- **Monitoring:** Vercel Analytics / Sentry
 
 ## Notes on Tech Stack Choices
 
-### Data Processing Focus
-This tech stack emphasizes data integration and transformation rather than complex analytics:
-- **Pandas** is used for ETL, data cleaning, and basic aggregations (not advanced statistical modeling)
-- **No NumPy** required - removed since we're not doing complex numerical computations or financial projections
-- **No specialized analytics libraries** - users will use their own tools (Excel, R, Python notebooks) for advanced analysis
+### Supabase-First Architecture
+This project uses Supabase as the unified backend platform:
+- **No separate backend server** - Supabase handles database, auth, storage, and serverless functions
+- **Row Level Security** - Authorization logic lives in the database, not application code
+- **Real-time capabilities** - Built-in for upload status updates and data refresh
+- **Type safety** - Auto-generated TypeScript types from database schema
 
-### Export-First Architecture
-The backend is optimized for preparing clean, well-structured exports:
-- **xlsxwriter** (via Pandas) for professional Excel exports with formatting and multiple sheets
-- **Multiple export formats** (Excel, CSV, JSON) to support different downstream tools
-- **API access** for programmatic data extraction by power users
+### Data Processing Approach
+While Supabase handles core backend services, this project has significant data processing needs:
+- **Edge Functions** handle file parsing, validation, and transformation
+- **SheetJS (xlsx)** replaces Python Pandas for Excel processing - runs in Edge Functions
+- **Validation schemas** in Zod mirror database constraints for client-side and server-side validation
+- Processing happens on upload, with results stored in normalized database tables
 
-### Dashboard Simplicity
-Dashboards focus on visualization rather than complex calculations:
-- **Recharts** provides clean, interactive charts without heavy dependencies
-- **TanStack Table** handles data tables with sorting/filtering
-- All complex calculations happen in the backend and are pre-computed
+### Export-First Design
+The platform prioritizes data export for Bell & Associates' rate modeling:
+- **Pre-built export packages** generated via database views and Edge Functions
+- **Multiple formats** (Excel, CSV) supported via SheetJS
+- **Custom export builder** uses Supabase queries with dynamic filters
+
+### Infrastructure-First, Dashboard-Second
+Aligns with mission - solid data infrastructure before visualization:
+- **Database schema** designed for solid waste rate study data structures
+- **Audit trails** via Supabase's built-in `created_at`/`updated_at` and custom history tables
+- **Data lineage** documented in database and application code
+- Dashboards added incrementally as budget allows
