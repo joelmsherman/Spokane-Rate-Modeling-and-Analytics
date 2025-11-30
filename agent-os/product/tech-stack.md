@@ -134,7 +134,7 @@ This project uses Supabase as the unified backend platform:
 ### Data Processing Approach
 While Supabase handles core backend services, this project has significant data processing needs:
 - **Edge Functions** handle file parsing, validation, and transformation
-- **SheetJS (xlsx)** replaces Python Pandas for Excel processing - runs in Edge Functions
+- **SheetJS (xlsx)** For Excel processing - runs in Edge Functions
 - **Validation schemas** in Zod mirror database constraints for client-side and server-side validation
 - Processing happens on upload, with results stored in normalized database tables
 
