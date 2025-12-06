@@ -27,7 +27,18 @@
 
 8. [ ] **Authentication System & Administrative Interface** — Implement secure login system with role-based access control (Admin, Analyst, Viewer roles) with appropriate permissions for upload, export, and user management; create web interface for user management. `M`
 
-9. [ ] **Source System Data Integrations** (Vertical Slices per system) — For each source system, build a complete data integration including: dedicated source dashboard showing upload history and data coverage metrics; upload interface (modal) with schema guidance and downloadable schema template; database schema for the source; validation rules with error reporting; ETL pipeline to parse and load validated data. Each source has unique upload schemas, so dashboards are source-specific rather than unified. `L - for each source`
+9. [ ] **Source Data Integrations** (Vertical Slices per dataset) — For each source data set, build a complete data integration. Each source has unique schemas, so dashboards are source-specific rather than unified. `L - for each source`
+
+    **Dashboard per source:** Paginated data table (server-side, 50 rows default) with sortable/filterable columns; row-level Edit and Delete actions; upload history and data coverage metrics.
+
+    **Upload flow (3-step modal):**
+    - Step 1: File selection with drag-drop, downloadable CSV template, schema summary
+    - Step 2: Field mapping with auto-match, required field indicators, 5-row preview
+    - Step 3: Validation results—errors block import, duplicates rejected by natural key, success confirms import
+
+    **Record-level CRUD:** Edit via modal form; soft delete for reference data (lines of business, ledger mappings, etc. TBD), hard delete for transactional data (expenses, tonnage, etc. TBD); all records track `created_by/at`, `updated_by/at`, `upload_batch_id`.
+
+    **Sources (these are examples - TBD):**
     - General Ledger/Financial
     - Billing
     - Routing
